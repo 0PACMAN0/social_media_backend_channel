@@ -93,7 +93,8 @@ export const deleteBlog=async(req,res,next)=>{
     const id=req.params.id;
     let blog;
     try{
-        blog = await Blog.findByIdAndDelete(id);
+        blog = await Blog.findByIdAndDelete(id).populate('user');
+        await blog.user.blogs.pull(blog);
     }
     catch(err)
     {
@@ -104,4 +105,4 @@ export const deleteBlog=async(req,res,next)=>{
         return res.status(500).json({message:"no such bllog"});
     }
     return res.status(200).json({message:"done deal the blog is deleted"});
-}
+};
